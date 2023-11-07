@@ -1,0 +1,98 @@
+// testar agora com os numeros da arv do exercicio
+/// FUNCIONANDO POREM
+/// IMPRIME UM ESPACO A MAIS NO FINAL
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int dado;
+    struct no *esq, *dir;
+} no;
+
+typedef struct pilha {
+    struct pilha * prox;
+    struct no * respectivo;
+    int cont;
+}pilha;
+
+// retorna um ponteiro pra head
+pilha * inicializa(){
+    pilha * head = malloc(sizeof(pilha));
+    head->prox = NULL;
+    head->respectivo = NULL;
+    head->cont = 0;
+    return head;
+}
+
+
+void empilha(pilha * head, no * noagregado){
+    pilha * new = malloc(sizeof(pilha));
+    new->prox = head->prox;
+    head->prox = new;
+    new->respectivo = noagregado;
+    head->cont++;
+}
+
+no * desempilha(pilha * head){ // retorna o no no topo da pilha
+    if (head->cont == 0) {
+        return NULL;
+    }
+    head->cont--;
+    pilha *aux = head->prox;
+    head->prox = aux->prox;
+    no *ret = aux->respectivo;
+    free(aux);
+    return ret;
+}
+
+void em_ordem (no *raiz){
+    pilha * head = inicializa();
+    no * aux = raiz;
+
+    while(head->cont != 0 || aux != NULL){
+        if(aux != NULL){
+            empilha(head,aux);
+            aux = aux->esq;
+        }else{
+            no *popped = desempilha(head);
+            if (popped != NULL) {
+                printf("%d ", popped->dado);
+                aux = popped->dir;
+            }
+        }
+    }
+}
+
+int main() {
+    // Exemplo de construção de uma árvore maior:
+    no *raiz = malloc(sizeof(no));
+    raiz->dado = 2;
+    raiz->esq = malloc(sizeof(no));
+    raiz->esq->dado = 5;
+    raiz->esq->esq = malloc(sizeof(no));
+    raiz->esq->esq->dado = 3;
+    raiz->esq->esq->esq = NULL;
+    raiz->esq->esq->dir = NULL;
+    raiz->esq->dir = malloc(sizeof(no));
+    raiz->esq->dir->dado = 8;
+    raiz->esq->dir->esq = malloc(sizeof(no));
+    raiz->esq->dir->esq->dado = 4;
+    raiz->esq->dir->dir = NULL;
+    raiz->dir = malloc(sizeof(no));
+    raiz->dir->dado = 7;
+    raiz->dir->esq = malloc(sizeof(no));
+    raiz->dir->esq->dado = 1;
+    raiz->dir->esq->esq = NULL;
+    raiz->dir->esq->dir = malloc(sizeof(no));
+    raiz->dir->esq->dir->dado = 9;
+    raiz->dir->dir = malloc(sizeof(no));
+    raiz->dir->dir->dado = 6;
+    raiz->dir->dir->esq = NULL;
+    raiz->dir->dir->dir = NULL;
+
+    printf("Percurso em ordem (in-order traversal):\n");
+    em_ordem(raiz);
+
+    return 0;
+}
