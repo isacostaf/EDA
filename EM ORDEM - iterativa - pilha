@@ -1,19 +1,3 @@
-// no pilha[100]; - Isso declara um array chamado pilha que pode conter 
-// 100 elementos do tipo no. Cada elemento do array é uma estrutura do 
-// tipo no, que inclui um inteiro dado e dois ponteiros para outras 
-// estruturas do tipo no, chamadas esq e dir. Portanto, com essa declaração, 
-// você está criando um array de estruturas do tipo no.
-
-// no *pilha[100]; - Isso declara um array chamado pilha que pode 
-// conter 100 ponteiros para estruturas do tipo no. Neste caso, pilha é 
-// um array de ponteiros, e cada elemento desse array aponta para uma 
-// estrutura do tipo no. Essa declaração cria uma matriz de ponteiros
-//  para estruturas no, o que significa que você precisará alocar memória 
-//  separadamente para cada estrutura que deseja armazenar e, em seguida, 
-//  atribuir os ponteiros a essas estruturas.
-
-/// EM ORDEM
-
 #include <stdio.h>
 #include <stdlib.h>
 
