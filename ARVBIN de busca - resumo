@@ -1,0 +1,161 @@
+//? INSERCAO: no lugar certo numa folha
+//? REMOCAO: da raiz e depois rearruma
+//? BUSCA: esquerda direita
+//? IMPRIME: pre em pos
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no{
+    int dado;
+    struct no * esq;
+    struct no * dir;
+}no;
+
+// retorna ponteiro pra raiz
+no * insere_rec (no * raiz, int x){
+
+    if(raiz == NULL){
+        no * novo = malloc(sizeof(no));
+        novo->dado = x;
+        novo->dir = NULL;
+        novo->esq = NULL;
+        return novo;
+    }
+
+    if(x >= raiz->dado){
+        return insere_rec(raiz->dir,x);
+    }else{
+        return insere_rec(raiz->esq,x);
+    }
+
+}
+
+no * insere_ite (no * raiz, int x){
+
+    no * novo = malloc(sizeof(no));
+    novo->dado = x;
+    novo->dir = NULL;
+    novo->esq = NULL;
+
+    if(raiz == NULL){
+        return novo;
+    }
+
+    no * antesaux = NULL;
+    no * aux = raiz;
+
+    while (aux != NULL){
+        if(x >= aux->dado){
+            antesaux = aux;
+            aux = aux->dir;
+        }else{
+            antesaux = aux;
+            aux = aux->esq;
+        }
+    }
+
+    // antes aux eh o ultimo e aux eh null
+    if(x >= antesaux->dado){
+        antesaux->dir = novo;
+    }else{
+        antesaux->esq = novo;
+    }
+
+    return raiz;
+}
+
+// retorna ponteiro pra nova raiz
+no * remove (no * raiz){
+
+    if(raiz->esq == NULL){
+        return raiz->dir;
+    }
+
+    no * aux = raiz->esq;
+    no * antesaux = raiz;
+
+    while(aux->dir != NULL){
+        antesaux = aux;
+        aux = aux->dir;
+    }
+
+    // aux sai como ultimo da esq mais a direita
+    // antesaux sai como seu pai, aponta pra ele com a direita
+
+    if(antesaux != raiz){
+        aux = raiz->esq;
+        antesaux = aux->esq;
+    }
+
+    aux = raiz->dir;
+    free(raiz);
+    return aux;
+}
+
+// retorna ponteiro pro achado
+no * busca_ite(no * raiz, int x){
+
+    no * aux = raiz;
+
+    while(aux->dado != x && aux != NULL){
+        if(x > aux->dado){
+            aux = aux->dir;
+        }else{
+            aux = aux->esq;
+        }
+    }
+
+    return aux;
+}
+
+no * busca_rec(no * raiz, int x){
+
+    if(raiz == NULL || raiz->dado == x){
+        return raiz;
+    }
+
+    if(x > raiz->dado){
+        return busca_rec(raiz->dir, x);
+    }
+
+    if(x < raiz->dado){
+        return busca_rec(raiz->esq,x);
+    }
+
+}
+
+//RECURSIVAS 
+void pre_ordem(no * raiz){
+
+    if(raiz != NULL){
+        printf("%d", raiz);
+        pre_ordem(raiz->esq);
+        pre_ordem(raiz->dir);
+    }
+}
+
+
+// int main() {
+//     no* raiz = NULL;
+
+//     // Inserindo elementos na árvore
+//     raiz = insere_ite(raiz, 50);
+//     raiz = insere_ite(raiz, 30);
+//     raiz = insere_ite(raiz, 70);
+//     raiz = insere_ite(raiz, 20);
+//     raiz = insere_ite(raiz, 40);
+//     raiz = insere_ite(raiz, 75);
+//     raiz = insere_ite(raiz, 60);
+//     raiz = insere_ite(raiz, 80);
+
+//     // Imprimindo a árvore em ordem
+//     printf("Árvore em ordem: ");
+//     imprimeEmOrdem(raiz);
+//     printf("\n");
+
+//     // Lembre-se de liberar a memória da árvore quando não for mais necessária
+//     // (não incluído aqui para simplificar o exemplo)
+
+//     return 0;
+// }
