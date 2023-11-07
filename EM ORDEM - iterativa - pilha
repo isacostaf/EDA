@@ -1,0 +1,88 @@
+// no pilha[100]; - Isso declara um array chamado pilha que pode conter 
+// 100 elementos do tipo no. Cada elemento do array é uma estrutura do 
+// tipo no, que inclui um inteiro dado e dois ponteiros para outras 
+// estruturas do tipo no, chamadas esq e dir. Portanto, com essa declaração, 
+// você está criando um array de estruturas do tipo no.
+
+// no *pilha[100]; - Isso declara um array chamado pilha que pode 
+// conter 100 ponteiros para estruturas do tipo no. Neste caso, pilha é 
+// um array de ponteiros, e cada elemento desse array aponta para uma 
+// estrutura do tipo no. Essa declaração cria uma matriz de ponteiros
+//  para estruturas no, o que significa que você precisará alocar memória 
+//  separadamente para cada estrutura que deseja armazenar e, em seguida, 
+//  atribuir os ponteiros a essas estruturas.
+
+/// EM ORDEM
+
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+    int dado;
+    struct no *esq, *dir;
+} no;
+
+void em_ordem (no *raiz){
+    no * pilha[101];
+    int topo = 0; // se for 0 ta vazia, o ult el ta sempre em topo -1, adicionamos sempre em topo
+    no * aux = raiz;
+    //pilha[topo] = raiz;
+    //topo++;
+    /// tiramos essas duas linhas pois estavamos empilhando raiz duas vezes
+    /// oq fazia com q imprimisse a raiz e a sub arvore direita duas vzs
+    /// nao precisamos agregar raiz em pilha topo e aumentar o topo p entrar no while
+    /// pq o aux ja é diferente de nulo (ja declaraamos isso em no * aux = raiz)
+    /// entao ele vai entrar no while de qualquer jeito
+
+    while(topo != 0 || aux != NULL){
+        if(aux != NULL){ // vamos pra esquerda pra chegar no ultimo da esq enquanto empilhamos nosso caminho pra voltar checando a direita depois
+            // empilha
+            pilha[topo] = aux;
+            topo++;
+            aux = aux->esq;
+        }else{
+            no * pop;
+            topo--;
+            pop = pilha[topo];
+            if(pop != NULL){
+                printf("%d ", pop->dado);
+                // vamos pra direita agora repetir o processo
+                aux = pop->dir;
+            }
+
+        }
+    }
+}
+
+// int main() {
+//     // Exemplo de construção de uma árvore maior:
+//     no *raiz = malloc(sizeof(no));
+//     raiz->dado = 2;
+//     raiz->esq = malloc(sizeof(no));
+//     raiz->esq->dado = 5;
+//     raiz->esq->esq = malloc(sizeof(no));
+//     raiz->esq->esq->dado = 3;
+//     raiz->esq->esq->esq = NULL;
+//     raiz->esq->esq->dir = NULL;
+//     raiz->esq->dir = malloc(sizeof(no));
+//     raiz->esq->dir->dado = 8;
+//     raiz->esq->dir->esq = malloc(sizeof(no));
+//     raiz->esq->dir->esq->dado = 4;
+//     raiz->esq->dir->dir = NULL;
+//     raiz->dir = malloc(sizeof(no));
+//     raiz->dir->dado = 7;
+//     raiz->dir->esq = malloc(sizeof(no));
+//     raiz->dir->esq->dado = 1;
+//     raiz->dir->esq->esq = NULL;
+//     raiz->dir->esq->dir = malloc(sizeof(no));
+//     raiz->dir->esq->dir->dado = 9;
+//     raiz->dir->dir = malloc(sizeof(no));
+//     raiz->dir->dir->dado = 6;
+//     raiz->dir->dir->esq = NULL;
+//     raiz->dir->dir->dir = NULL;
+
+//     printf("Percurso em ordem:\n");
+//     em_ordem(raiz);
+
+//     return 0;
+// }
