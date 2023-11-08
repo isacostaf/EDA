@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+enum color {VERMELHO, PRETO};
+
+typedef struct no{
+    int dado;
+    struct no * esq;
+    struct no * dir;
+    enum color cor;
+}no;
+
+no * rotacao_direita (no * raiz){
+
+    // no é a raiz
+    // aux é o filho esq
+    no * node = raiz->esq;
+
+    //node.esq continua igual
+    raiz->esq = node->dir;
+    node->dir = raiz;
+
+    node->cor = raiz->cor;
+    raiz->cor = VERMELHO;
+
+}
+
+no * rotacao_esquerda (no * raiz){
+
+    no * node = raiz->dir;
+
+    raiz->dir = node->esq;
+    node->esq = raiz;
+
+    node->cor = raiz->cor;
+    raiz->cor = VERMELHO;
+
+}
+
+no * elevacaodecor (no * raiz){
+
+    raiz->cor = PRETO;
+    raiz->dir->cor = VERMELHO;
+    raiz->esq->cor = PRETO;
+
+}
+ //recursao
+no * inserir (no * raiz, int x){
+
+    if(raiz == NULL){
+        no * novo = malloc(sizeof(no));
+        novo->cor = VERMELHO;
+        novo->dado = x;
+        novo->dir = NULL;
+        novo->esq = NULL;
+        return novo;
+    }
+
+    if(x > raiz->dado){
+        raiz->dir = inserir(raiz->dir,x);
+    }else{
+        raiz->esq = inserir(raiz->esq,x);
+    }
+
+    return corrige(raiz);
+
+}
+
+no * corrige(no * raiz){
+
+    if(raiz->dir->cor == VERMELHO && raiz->esq->cor == PRETO){
+        return rotacao_esquerda(raiz);
+    }
+
+
+    if(raiz->esq == VERMELHO && raiz->dir == VERMELHO){
+        return elevacaodecor(raiz);
+    }
+
+    //insere vemrleho como filho esq de um no vermelho
+    // isso vai ser corggido so la em cima em outra passada
+    // quando raiz for o pai da raiz de agr
+    if(raiz->esq->cor == VERMELHO && raiz->esq->esq->cor == VERMELHO){
+        raiz = rotacao_direita(raiz);
+        return elevacaodecor(raiz);
+    }
+
+}
+
