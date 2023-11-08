@@ -24,10 +24,12 @@ no * insere_rec (no * raiz, int x){
     }
 
     if(x >= raiz->dado){
-        return insere_rec(raiz->dir,x);
+        raiz->dir = insere_rec(raiz->dir,x);
     }else{
-        return insere_rec(raiz->esq,x);
+        raiz->esq = insere_rec(raiz->esq,x);
     }
+
+    return raiz;
 
 }
 
