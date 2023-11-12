@@ -1,0 +1,94 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct no {
+int dado;
+struct no *esq, *dir;
+} no;
+
+void pos_ordem(no *raiz) {
+    no *pilha[101];
+    no *aux = raiz;
+    int topo = 0;
+    no *ultimoVisitado = NULL;
+
+    while (topo != 0 || aux != NULL) {
+        if (aux != NULL) {
+            pilha[topo] = aux; // empilha
+            topo++; // atualiza
+            aux = aux->esq; // anda pra frente
+        } else {
+            no *pop = pilha[topo - 1];
+
+            if (pop->dir != NULL && pop->dir != ultimoVisitado) {
+                aux = pop->dir; // move para o nó da direita
+            } else {
+                printf("%d ", pop->dado);
+                topo--; // desempilha
+                ultimoVisitado = pop; // marca o nó como visitado
+            }
+        }
+    }
+}
+
+
+int main() {
+    // Exemplo de construção de uma árvore maior:
+    no *raiz = malloc(sizeof(no));
+    raiz->dado = 2;
+    raiz->esq = malloc(sizeof(no));
+    raiz->esq->dado = 5;
+    raiz->esq->esq = malloc(sizeof(no));
+    raiz->esq->esq->dado = 3;
+    raiz->esq->esq->esq = NULL;
+    raiz->esq->esq->dir = NULL;
+    raiz->esq->dir = malloc(sizeof(no));
+    raiz->esq->dir->dado = 8;
+    raiz->esq->dir->esq = malloc(sizeof(no));
+    raiz->esq->dir->esq->dado = 4;
+    raiz->esq->dir->dir = NULL;
+    raiz->dir = malloc(sizeof(no));
+    raiz->dir->dado = 7;
+    raiz->dir->esq = malloc(sizeof(no));
+    raiz->dir->esq->dado = 1;
+    raiz->dir->esq->esq = NULL;
+    raiz->dir->esq->dir = malloc(sizeof(no));
+    raiz->dir->esq->dir->dado = 9;
+    raiz->dir->dir = malloc(sizeof(no));
+    raiz->dir->dir->dado = 6;
+    raiz->dir->dir->esq = NULL;
+    raiz->dir->dir->dir = NULL;
+
+    printf("Percurso em ordem:\n");
+    pos_ordem(raiz);
+
+    return 0;
+}
+
+
+// Variável ultimoVisitado:
+
+// Adicionamos a variável ultimoVisitado para manter o controle 
+// do último nó que foi visitado e impresso. Isso é necessário para 
+// evitar a duplicação de impressões de nós que têm subárvores à direita.
+
+// Condição de Verificação do Nó à Direita:
+
+// No bloco else, onde verificamos o nó à direita (pop->dir), agora 
+// temos uma condição adicional para garantir que não estamos repetindo
+//  nós já visitados.
+
+// if (pop->dir != NULL && pop->dir != ultimoVisitado) verifica se há 
+// um nó à direita e se não é o mesmo nó que já foi visitado anteriormente.
+//  Se ambas as condições são verdadeiras, movemos para o nó à direita
+//   (aux = pop->dir).
+
+// Atualização da Variável ultimoVisitado:
+
+// A variável ultimoVisitado é atualizada para armazenar o nó que 
+// acabou de ser impresso (ultimoVisitado = pop). Isso evita que o mesmo
+//  nó seja impresso novamente se voltarmos a ele durante o percurso.
+// Essas alterações visam garantir que cada nó seja impresso apenas uma 
+// vez, mesmo que tenha uma subárvore à direita, evitando assim loops 
+// infinitos e duplicação de impressões. Essa lógica é essencial para 
+// o correto percurso em pós-ordem de uma árvore binária.
